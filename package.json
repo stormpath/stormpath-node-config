@@ -1,0 +1,41 @@
+{
+  "name": "stormpath-config",
+  "version": "0.0.1",
+  "description": "Stormpath configuration loader.",
+  "main": "index.js",
+  "scripts": {
+    "test": "istanbul cover node_modules/mocha/bin/_mocha -- --check-leaks test",
+    "test-travis": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --reporter spec && cat ./coverage/lcov.info | ./node_modules/coveralls/bin/coveralls.js && rm -rf ./coverage"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stormpath/stormpath-node-config.git"
+  },
+  "keywords": [
+    "express",
+    "stormpath",
+    "authentication",
+    "security",
+    "configuration"
+  ],
+  "author": "Stormpath, Inc.",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/stormpath/stormpath-node-config/issues"
+  },
+  "homepage": "https://github.com/stormpath/stormpath-node-config",
+  "devDependencies": {
+    "coveralls": "^2.11.4",
+    "istanbul": "^0.3.20",
+    "mocha": "^2.3.3",
+    "mocha-lcov-reporter": "^1.0.0"
+  },
+  "dependencies": {
+    "async": "^1.4.2",
+    "deep-extend": "^0.4.0",
+    "expand-home-dir": "0.0.2",
+    "flat": "^1.6.0",
+    "js-yaml": "^3.4.2",
+    "properties-parser": "^0.3.0"
+  }
+}

@@ -2,8 +2,8 @@
 
 *Stormpath configuration loader.*
 
-[![NPM Version](https://img.shields.io/npm/v/stormpath-node-config.svg?style=flat)](https://npmjs.org/package/stormpath-node-config)
-[![NPM Downloads](http://img.shields.io/npm/dm/stormpath-node-config.svg?style=flat)](https://npmjs.org/package/stormpath-node-config)
+[![NPM Version](https://img.shields.io/npm/v/stormpath-config.svg?style=flat)](https://npmjs.org/package/stormpath-config)
+[![NPM Downloads](http://img.shields.io/npm/dm/stormpath-config.svg?style=flat)](https://npmjs.org/package/stormpath-config)
 [![Build Status](https://img.shields.io/travis/stormpath/stormpath-node-config.svg?style=flat)](https://travis-ci.org/stormpath/stormpath-node-config)
 [![Coverage Status](https://coveralls.io/repos/stormpath/stormpath-node-config/badge.svg?branch=master)](https://coveralls.io/r/stormpath/stormpath-node-config?branch=master)
 

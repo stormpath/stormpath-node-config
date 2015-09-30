@@ -1,4 +1,4 @@
-# express-stormpath-config
+# stormpath-node-config
 
 *Stormpath configuration loader.*
 
@@ -16,7 +16,7 @@ not meant for general consumption.
 To install this library, just run:
 
 ```
-$ npm install stormpath-node-config --save
+$ npm install stormpath-config --save
 ```
 
 
@@ -150,7 +150,6 @@ We regularly maintain this repository, and are quick to review pull requests
 and accept changes!
 
 We <333 contributions!
-
 
 ## Copyright
 

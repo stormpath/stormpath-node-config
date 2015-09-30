@@ -36,6 +36,7 @@
     "expand-home-dir": "0.0.2",
     "flat": "^1.6.0",
     "js-yaml": "^3.4.2",
+    "lodash": "^3.10.1",
     "properties-parser": "^0.3.0"
   }
 }

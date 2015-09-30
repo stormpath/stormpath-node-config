@@ -67,7 +67,8 @@ configLoader.load(function (err, config) {
 A strategy is simply a prototype that implements a method named `process` that takes the parameters `config` and `callback`. All it expects is that the callback is called with the first argument as an error (null if none) and the second containing the modified/processed config. E.g. as shown below:
 
 ```
-var MyConfigStrategy = function () {};
+function MyConfigStrategy () {
+}
 
 MyConfigStrategy.prototype.process = function (config, callback) {
   // Apply strategy to config and return result in callback

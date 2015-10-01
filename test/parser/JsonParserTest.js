@@ -21,7 +21,7 @@ describe('JsonParser', function () {
 
       done();
     });
-  })
+  });
 
   it('should parse invalid json with error', function (done) {
     var invalidJson = ',{"abc":"123","def":[3,1,2]}';
@@ -34,5 +34,5 @@ describe('JsonParser', function () {
 
       done();
     });
-  })
+  });
 });

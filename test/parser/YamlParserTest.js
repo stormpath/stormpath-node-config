@@ -21,7 +21,7 @@ describe('YamlParser', function () {
 
       done();
     });
-  })
+  });
 
   it('should parse invalid yaml with error', function (done) {
     var invalidJson = ",---\n  abc: \"123\"\n  def:\n    - 3\n    - 1\n    - 2\n";
@@ -34,5 +34,5 @@ describe('YamlParser', function () {
 
       done();
     });
-  })
+  });
 });

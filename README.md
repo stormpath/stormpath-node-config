@@ -5,7 +5,7 @@
 [![NPM Version](https://img.shields.io/npm/v/stormpath-config.svg?style=flat)](https://npmjs.org/package/stormpath-config)
 [![NPM Downloads](http://img.shields.io/npm/dm/stormpath-config.svg?style=flat)](https://npmjs.org/package/stormpath-config)
 [![Build Status](https://img.shields.io/travis/stormpath/stormpath-node-config.svg?style=flat)](https://travis-ci.org/stormpath/stormpath-node-config)
-[![Coverage Status](https://coveralls.io/repos/stormpath/stormpath-node-config/badge.svg?branch=master)](https://coveralls.io/r/stormpath/stormpath-node-config?branch=master)
+[![Coverage Status](https://coveralls.io/repos/stormpath/stormpath-node-config/badge.svg?branch=master&service=github)](https://coveralls.io/github/stormpath/stormpath-node-config?branch=master)
 
 This library is responsible for loading the Stormpath configuration.  It is an internal module used by stormpath-node-sdk, and express-stormpath, and is
 not meant for general consumption.

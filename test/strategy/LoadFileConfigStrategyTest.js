@@ -2,14 +2,13 @@
 
 var common = require('../common');
 
-var _ = require('lodash');
 var fs = require('fs');
 
+var _ = common._;
 var temp = common.temp;
-var should = common.should;
 var assert = common.assert;
 
-var strategy = require('../../lib/strategy');;
+var strategy = require('../../lib/strategy');
 var LoadFileConfigStrategy = strategy.LoadFileConfigStrategy;
 
 describe('LoadFileConfigStrategy', function () {

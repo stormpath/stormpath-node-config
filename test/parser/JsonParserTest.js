@@ -1,8 +1,6 @@
 'use strict';
 
 var common = require('../common');
-
-var should = common.should;
 var assert = common.assert;
 
 describe('JsonParser', function () {

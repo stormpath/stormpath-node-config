@@ -1,14 +1,12 @@
-var _ = require('lodash');
-var chai = require('chai');
 var temp = require('temp');
+var chai = require('chai');
 
 // Automatically clean up temp
 // files after tests complete.
 temp.track();
 
 module.exports = {
-  _: _,
-  temp: temp,
+  _: require('lodash'),
   assert: chai.assert,
-  should: chai.should()
+  temp: temp
 };

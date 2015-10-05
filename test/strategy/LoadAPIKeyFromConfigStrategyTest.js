@@ -1,11 +1,12 @@
 'use strict';
 
 var fs = require('fs');
+
 var common = require('../common');
 
 var _ = common._;
-var temp = common.temp;
 var assert = common.assert;
+var temp = common.temp;
 
 var strategy = require('../../lib/strategy');
 var LoadAPIKeyFromConfigStrategy = strategy.LoadAPIKeyFromConfigStrategy;

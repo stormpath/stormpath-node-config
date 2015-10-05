@@ -21,6 +21,14 @@ describe('YamlParser', function () {
     });
   });
 
+  it('should be able to parse empty config without error', function (done) {
+    parse('', function (err, result) {
+      assert.isNull(err);
+      assert.isNull(result);
+      done();
+    });
+  });
+
   it('should parse invalid yaml with error', function (done) {
     var invalidJson = ",---\n  abc: \"123\"\n  def:\n    - 3\n    - 1\n    - 2\n";
     parse(invalidJson, function (err, result) {

@@ -2,11 +2,11 @@
 
 var common = require('../common');
 
-var fs = require('fs');
-
 var _ = common._;
-var temp = common.temp;
 var assert = common.assert;
+var temp = common.temp;
+
+var fs = require('fs');
 
 var strategy = require('../../lib/strategy');
 var LoadFileConfigStrategy = strategy.LoadFileConfigStrategy;

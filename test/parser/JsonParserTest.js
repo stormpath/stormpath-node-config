@@ -21,6 +21,14 @@ describe('JsonParser', function () {
     });
   });
 
+  it('should be able to parse empty config without error', function (done) {
+    parse('', function (err, result) {
+      assert.isNull(err);
+      assert.isNull(result);
+      done();
+    });
+  });
+
   it('should parse invalid json with error', function (done) {
     var invalidJson = ',{"abc":"123","def":[3,1,2]}';
     parse(invalidJson, function (err, result) {

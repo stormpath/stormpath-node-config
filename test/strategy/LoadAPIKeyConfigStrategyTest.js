@@ -1,11 +1,12 @@
 'use strict';
 
 var fs = require('fs');
+
 var common = require('../common');
 
 var _ = common._;
-var temp = common.temp;
 var assert = common.assert;
+var temp = common.temp;
 
 var strategy = require('../../lib/strategy');
 var LoadAPIKeyConfigStrategy = strategy.LoadAPIKeyConfigStrategy;
@@ -66,6 +67,31 @@ describe('LoadAPIKeyConfigStrategy', function () {
         }
       });
 
+      done();
+    });
+  });
+
+  it("should succeed when loading valid but empty key without requiring it to exist", function (done) {
+    var strategy = new LoadAPIKeyConfigStrategy(validKeyPath);
+
+    fs.writeFileSync(validKeyPath, '');
+
+    strategy.process(_.cloneDeep(testConfig), function (err, config) {
+      assert.isNull(err);
+      assert.deepEqual(config, {});
+      done();
+    });
+  });
+
+  it("should error when loading valid but empty key and requiring it to exist", function (done) {
+    var strategy = new LoadAPIKeyConfigStrategy(validKeyPath, true);
+
+    fs.writeFileSync(validKeyPath, '');
+
+    strategy.process(_.cloneDeep(testConfig), function (err, config) {
+      assert.isUndefined(config);
+      assert.isNotNull(err);
+      assert.equal(err.message, 'Unable to read properties file: ' + validKeyPath);
       done();
     });
   });

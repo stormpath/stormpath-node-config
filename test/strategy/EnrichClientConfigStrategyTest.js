@@ -21,7 +21,7 @@ describe('EnrichClientConfigStrategy', function () {
     });
   });
 
-  it("should copy the apiKey to the root config if key is set", function (done) {
+  it("should copy the api key to the root config if key is set", function (done) {
     var strategy = new EnrichClientConfigStrategy();
 
     var apiKey = {

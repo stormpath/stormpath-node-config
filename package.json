@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "async": "^1.4.2",
-    "deep-extend": "^0.4.0",
+    "cloneextend": "0.0.3",
     "expand-home-dir": "0.0.2",
     "flat": "^1.6.0",
     "js-yaml": "^3.4.2",

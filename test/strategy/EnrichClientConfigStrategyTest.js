@@ -48,4 +48,34 @@ describe('EnrichClientConfigStrategy', function () {
       done();
     });
   });
+
+  it("should copy api key to client if present in root", function (done) {
+    var strategy = new EnrichClientConfigStrategy();
+
+    var testConfig = {
+      apiKey: {
+        id: "abc",
+        secret: "def"
+      }
+    };
+
+    strategy.process(_.cloneDeep(testConfig), function (err, config) {
+      assert.isNull(err);
+
+      assert.deepEqual(config, {
+        apiKey: {
+          id: "abc",
+          secret: "def"
+        },
+        client: {
+          apiKey: {
+            id: "abc",
+            secret: "def"
+          }
+        }
+      });
+
+      done();
+    });
+  });
 });

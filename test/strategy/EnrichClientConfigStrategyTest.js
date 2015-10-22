@@ -55,7 +55,8 @@ describe('EnrichClientConfigStrategy', function () {
     var testConfig = {
       apiKey: {
         id: "abc",
-        secret: "def"
+        secret: "def",
+        file: null
       }
     };
 
@@ -65,7 +66,8 @@ describe('EnrichClientConfigStrategy', function () {
       assert.deepEqual(config, {
         apiKey: {
           id: "abc",
-          secret: "def"
+          secret: "def",
+          file: null
         },
         client: {
           apiKey: {

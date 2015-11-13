@@ -1,6 +1,6 @@
 {
   "name": "stormpath-config",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Stormpath configuration loader.",
   "main": "index.js",
   "scripts": {

@@ -82,4 +82,29 @@ describe('ExtendConfigStrategy', function () {
       done();
     });
   });
+
+  it('should preserve prototype references', function() {
+    var baseConfig = {
+      foo: 'bar',
+      cacheOptions: { }
+    };
+
+    function MockCacheClient(){
+      return this;
+    }
+    MockCacheClient.prototype.get = function get() { };
+    MockCacheClient.prototype.set = function set() { };
+    var extendConfig = {
+      cacheOptions: {
+        client: new MockCacheClient()
+      }
+    };
+    var strategy = new ExtendConfigStrategy(extendConfig);
+
+    strategy.process(baseConfig, function(err, newConfig){
+      assert.isNull(err);
+      assert.equal(newConfig.foo, baseConfig.foo);
+      assert.equal(newConfig.cacheOptions.client.get, extendConfig.cacheOptions.client.get);
+    });
+  });
 });

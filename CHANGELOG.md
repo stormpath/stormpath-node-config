@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.0.15
+
+Patch for 0.0.14 - fixing a null reference.
+
 ### 0.0.14
 
 Adding a temporary patch to `ExtendConfigStrategy` to ensure that prototype

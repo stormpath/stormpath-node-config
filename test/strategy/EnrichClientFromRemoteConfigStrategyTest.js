@@ -5,6 +5,7 @@ var stormpath = require('stormpath');
 var common = require('../common');
 var assert = common.assert;
 var sinon = common.sinon;
+var strings = common.strings;
 
 var Application = require('stormpath/lib/resource/Application');
 var Collection = require('stormpath/lib/resource/CollectionResource');
@@ -14,14 +15,6 @@ var EnrichClientFromRemoteConfigStrategy = strategy.EnrichClientFromRemoteConfig
 
 describe('EnrichClientFromRemoteConfigStrategy', function () {
   var client, testStrategy;
-
-  var applicationNotFoundError = /The provided application could not be found/;
-
-  var unresolveableCollectionError = /Could not automatically resolve a Stormpath Application/;
-
-  var mockApplicationNotFoundResponse = {
-    status: 404
-  };
 
   var mockRestApiError = {
     err: 'something bad happened'
@@ -51,7 +44,6 @@ describe('EnrichClientFromRemoteConfigStrategy', function () {
   });
 
   before(function (done) {
-
     client = new stormpath.Client({
       skipRemoteConfig: true
     });
@@ -70,13 +62,11 @@ describe('EnrichClientFromRemoteConfigStrategy', function () {
   });
 
   describe('when an application name is specified', function(){
-
     afterEach(function(){
       client.getApplications.restore();
     });
 
     it('should return REST API errors if the erorr is not 404', function(done) {
-
       var testConfig = {
         application: {
           name: 'hello'
@@ -107,7 +97,7 @@ describe('EnrichClientFromRemoteConfigStrategy', function () {
 
       testStrategy.process(testConfig, function (err) {
         assert.isNotNull(err);
-        assert.match(err.message,applicationNotFoundError);
+        assert.equal(err.message, strings.APP_NAME_NOT_FOUND.replace('%name%', mockName));
         done();
       });
     });
@@ -132,7 +122,6 @@ describe('EnrichClientFromRemoteConfigStrategy', function () {
         done();
       });
     });
-
   });
 
   describe('when an application href is defined', function(){
@@ -150,7 +139,6 @@ describe('EnrichClientFromRemoteConfigStrategy', function () {
     });
 
     it('should return REST API errors if the erorr is not 404', function(done) {
-
       sinon.stub(client, 'getApplication')
         .withArgs(mockHref)
         .yields(mockRestApiError);
@@ -160,25 +148,23 @@ describe('EnrichClientFromRemoteConfigStrategy', function () {
         assert.deepEqual(err,mockRestApiError);
         done();
       });
-
     });
 
     it('should return an error if the application cannot be found by href', function(done) {
-
       sinon.stub(client, 'getApplication')
         .withArgs(mockHref)
-        .yields(mockApplicationNotFoundResponse);
+        .yields({
+          status: 404
+        });
 
       testStrategy.process(testConfig, function (err) {
         assert.isNotNull(err);
-        assert.match(err.message,applicationNotFoundError);
+        assert.equal(err.message, strings.APP_HREF_NOT_FOUND.replace('%href%', mockHref));
         done();
       });
-
     });
 
     it('should resolve application by href if the application exists', function (done) {
-
       sinon.stub(client, 'getApplication')
         .withArgs(mockHref)
         .yields(null, new Application(mockApplication));
@@ -188,12 +174,10 @@ describe('EnrichClientFromRemoteConfigStrategy', function () {
         assert.equal(resultConfig.application.href, mockApplication.href);
         done();
       });
-
     });
   });
 
   describe('when neither href or name is specified', function () {
-
     var testConfig = {};
 
     afterEach(function(){
@@ -201,7 +185,6 @@ describe('EnrichClientFromRemoteConfigStrategy', function () {
     });
 
     it('should return REST API errors if the erorr is not 404', function(done) {
-
       sinon.stub(client, 'getApplications').yields(mockRestApiError);
 
       testStrategy.process(testConfig, function (err) {
@@ -212,19 +195,17 @@ describe('EnrichClientFromRemoteConfigStrategy', function () {
     });
 
     it('should return an "unresolveable" error if more than one application exists, other than the `Stormpath` application', function(done) {
-
       sinon.stub(client, 'getApplications')
         .yields(null, mockUnresolveableApplicationResponse);
 
       testStrategy.process(testConfig, function (err) {
         assert.isNotNull(err);
-        assert.match(err.message,unresolveableCollectionError);
+        assert.equal(err.message, strings.UNABLE_TO_AUTO_RESOLVE_APP);
         done();
       });
     });
 
     it('should return the application that is not the `Stormpath` application, if that is the only other application that exists', function (done) {
-
       sinon.stub(client, 'getApplications')
         .yields(null, mockResolveableApplicationResponse);
 

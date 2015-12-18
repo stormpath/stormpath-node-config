@@ -5,6 +5,7 @@ var stormpath = require('stormpath');
 var common = require('../common');
 var assert = common.assert;
 var sinon = common.sinon;
+var strings = common.strings;
 
 var Application = require('stormpath/lib/resource/Application');
 var Collection = require('stormpath/lib/resource/CollectionResource');
@@ -76,7 +77,7 @@ describe('EnrichIntegrationFromRemoteConfigStrategy', function () {
     it('should error if invalid', function (done) {
       testStrategy.process({ application: { href: '123' } }, function (err) {
         assert.isNotNull(err);
-        assert.equal(err.message, 'Unable to resolve a Stormpath application.');
+        assert.equal(err.message, strings.UNABLE_TO_RESOLVE_APP);
         done();
       });
     });
@@ -90,7 +91,7 @@ describe('EnrichIntegrationFromRemoteConfigStrategy', function () {
 
       testStrategy.process(mockConfig, function (err) {
         assert.isNotNull(err);
-        assert.equal(err.message, 'No account stores are mapped to the specified application. Account stores are required for login and registration.');
+        assert.equal(err.message, strings.NO_ACCOUNT_STORES_MAPPED);
         done();
       });
     });
@@ -104,7 +105,7 @@ describe('EnrichIntegrationFromRemoteConfigStrategy', function () {
 
       testStrategy.process(mockConfig, function (err) {
         assert.isNotNull(err);
-        assert.equal(err.message, 'No default account store is mapped to the specified application. A default account store is required for registration.');
+        assert.equal(err.message, strings.NO_DEFAULT_ACCOUNT_STORE_MAPPED);
         done();
       });
     });

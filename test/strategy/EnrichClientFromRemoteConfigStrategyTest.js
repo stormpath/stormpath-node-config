@@ -5,6 +5,7 @@ var stormpath = require('stormpath');
 var common = require('../common');
 var assert = common.assert;
 var sinon = common.sinon;
+var strings = common.strings;
 
 var Application = require('stormpath/lib/resource/Application');
 var Collection = require('stormpath/lib/resource/CollectionResource');
@@ -96,7 +97,7 @@ describe('EnrichClientFromRemoteConfigStrategy', function () {
 
       testStrategy.process(testConfig, function (err) {
         assert.isNotNull(err);
-        assert.match(err.message, /The provided application could not be found/);
+        assert.equal(err.message, strings.APP_NAME_NOT_FOUND.replace('%name%', mockName));
         done();
       });
     });
@@ -158,7 +159,7 @@ describe('EnrichClientFromRemoteConfigStrategy', function () {
 
       testStrategy.process(testConfig, function (err) {
         assert.isNotNull(err);
-        assert.match(err.message, /The provided application could not be found/);
+        assert.equal(err.message, strings.APP_HREF_NOT_FOUND.replace('%href%', mockHref));
         done();
       });
     });
@@ -199,7 +200,7 @@ describe('EnrichClientFromRemoteConfigStrategy', function () {
 
       testStrategy.process(testConfig, function (err) {
         assert.isNotNull(err);
-        assert.match(err.message, /Could not automatically resolve a Stormpath Application/);
+        assert.equal(err.message, strings.UNABLE_TO_AUTO_RESOLVE_APP);
         done();
       });
     });

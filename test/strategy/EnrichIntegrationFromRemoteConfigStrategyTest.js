@@ -7,8 +7,10 @@ var assert = common.assert;
 var sinon = common.sinon;
 var strings = common.strings;
 
+var Directory = require('stormpath/lib/resource/Directory');
 var Application = require('stormpath/lib/resource/Application');
 var Collection = require('stormpath/lib/resource/CollectionResource');
+var AccountStoreMapping = require('stormpath/lib/resource/AccountStoreMapping');
 
 var strategy = require('../../lib/strategy');
 var EnrichIntegrationFromRemoteConfigStrategy = strategy.EnrichIntegrationFromRemoteConfigStrategy;
@@ -51,6 +53,17 @@ describe('EnrichIntegrationFromRemoteConfigStrategy', function () {
       .yields(null, mockAccountStoreMappings);
 
     return mockApplication;
+  }
+
+  function makeMockDirectory() {
+    var directory = new Directory({ href: 'http://mock.api/directories/mock' });
+
+    sinon.stub(directory, 'getProvider')
+      .yields(null, {
+        providerId: 'mock'
+      });
+
+    return directory;
   }
 
   before(function (done) {
@@ -106,6 +119,35 @@ describe('EnrichIntegrationFromRemoteConfigStrategy', function () {
       testStrategy.process(mockConfig, function (err) {
         assert.isNotNull(err);
         assert.equal(err.message, strings.NO_DEFAULT_ACCOUNT_STORE_MAPPED);
+        done();
+      });
+    });
+
+    it('should error if both web.register.autoLogin and config.web.verifyEmail.enabled is set at same time', function (done) {
+      var mockAccountStoreMapping = new AccountStoreMapping({ accountStore: makeMockDirectory() });
+      var mockAccountStoreMappings = new Collection({ size: 1, items: [mockAccountStoreMapping] }, null, AccountStoreMapping);
+
+      mockAccountStoreMappings.detect = function (iter, complete) {
+        complete(mockAccountStoreMapping);
+      };
+
+      mockAccountStoreMappings.each = function (iter, complete) {
+        iter(mockAccountStoreMapping, function () {
+          complete();
+        });
+      };
+
+      sinon.stub(mockAccountStoreMapping, 'getAccountStore')
+        .yields(null, mockAccountStoreMapping.accountStore);
+
+      var mockApplication = makeMockApplication(null, mockAccountStoreMappings);
+      var mockConfig = makeMockConfig(mockApplication);
+
+      mockConfig.web.register.autoLogin = true;
+
+      testStrategy.process(mockConfig, function (err) {
+        assert.isNotNull(err);
+        assert.equal(err.message, strings.CONFLICTING_AUTO_LOGIN_AND_EMAIL_VERIFICATION_CONFIG);
         done();
       });
     });

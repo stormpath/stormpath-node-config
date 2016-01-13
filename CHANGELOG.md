@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.0.18
+
+* Fixed issue with expandHomeDir() not returning absolute path when home path was missing.
+
 ### 0.0.17
 
 * Fixed issue with file loaders crashing when home environment wasn't being set.

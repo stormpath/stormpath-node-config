@@ -15,6 +15,8 @@ var AccountStoreMapping = require('stormpath/lib/resource/AccountStoreMapping');
 var strategy = require('../../lib/strategy');
 var EnrichIntegrationFromRemoteConfigStrategy = strategy.EnrichIntegrationFromRemoteConfigStrategy;
 
+var sandbox;
+
 describe('EnrichIntegrationFromRemoteConfigStrategy', function () {
   var client, testStrategy;
 
@@ -24,12 +26,14 @@ describe('EnrichIntegrationFromRemoteConfigStrategy', function () {
   };
 
   var mockDirectory = {
+    href: 'https://stormpath.mock/directories/stormpath',
     accountCreationPolicy: {
       verificationEmailStatus: 'ENABLED'
     },
     passwordPolicy: {
       resetEmailStatus: 'ENABLED'
-    }
+    },
+    getPasswordPolicy: function () {}
   };
 
   function makeMockConfig(mockApplication) {
@@ -37,6 +41,15 @@ describe('EnrichIntegrationFromRemoteConfigStrategy', function () {
       application: mockApplication,
       web: {
         register: {
+          enabled: true
+        },
+        forgotPassword: {
+          enabled: true
+        },
+        changePassword: {
+          enabled: true
+        },
+        verifyEmail: {
           enabled: true
         }
       }
@@ -84,6 +97,14 @@ describe('EnrichIntegrationFromRemoteConfigStrategy', function () {
         .yields(null, mockDirectory);
       done();
     });
+  });
+
+  beforeEach(function () {
+    sandbox = sinon.sandbox.create();
+  });
+
+  afterEach(function () {
+    sandbox.restore();
   });
 
   describe('when resolving an application', function () {
@@ -177,6 +198,76 @@ describe('EnrichIntegrationFromRemoteConfigStrategy', function () {
         assert.isNull(err);
         assert.isDefined(result.socialProviders);
         done();
+      });
+    });
+  });
+
+  describe('_enrichWithDirectoryPolicies method', function () {
+    var enrichWithDirectoryPolicies;
+    var mockConfig;
+
+    beforeEach(function () {
+      var mockAccountStoreMappings = new Collection({ size: 0 });
+      var mockApplication = makeMockApplication(null, mockAccountStoreMappings);
+
+      var policy = {
+        getStrength: function () {}
+      };
+
+      enrichWithDirectoryPolicies = testStrategy._enrichWithDirectoryPolicies;
+      mockConfig = makeMockConfig(mockApplication);
+
+      sandbox.stub(mockDirectory, 'getPasswordPolicy').yields(null, policy);
+      sandbox.stub(policy, 'getStrength').yields(null, {});
+    });
+
+    describe('directory.passwordPolicy.resetEmailStatus property', function () {
+      describe('when "ENABLED"', function () {
+        beforeEach(function () {
+          mockDirectory.passwordPolicy.resetEmailStatus = 'ENABLED';
+        });
+
+        it('should set config.web.forgotPassword.enabled to true', function (done) {
+          mockConfig.web.forgotPassword.enabled = false;
+
+          enrichWithDirectoryPolicies(client, mockConfig, mockDirectory.href, function () {
+            assert.equal(mockConfig.web.forgotPassword.enabled, true);
+            done();
+          });
+        });
+
+        it('should set config.web.changePassword.enabled to true', function (done) {
+          mockConfig.web.changePassword.enabled = false;
+
+          enrichWithDirectoryPolicies(client, mockConfig, mockDirectory.href, function () {
+            assert.equal(mockConfig.web.changePassword.enabled, true);
+            done();
+          });
+        });
+      });
+
+      describe('when undefined', function () {
+        beforeEach(function () {
+          mockDirectory.passwordPolicy.resetEmailStatus = undefined;
+        });
+
+        it('should set config.web.forgotPassword.enabled to false', function (done) {
+          mockConfig.web.forgotPassword.enabled = true;
+
+          enrichWithDirectoryPolicies(client, mockConfig, mockDirectory.href, function () {
+            assert.equal(mockConfig.web.forgotPassword.enabled, false);
+            done();
+          });
+        });
+
+        it('should set config.web.changePassword.enabled to false', function (done) {
+          mockConfig.web.changePassword.enabled = true;
+
+          enrichWithDirectoryPolicies(client, mockConfig, mockDirectory.href, function () {
+            assert.equal(mockConfig.web.changePassword.enabled, false);
+            done();
+          });
+        });
       });
     });
   });

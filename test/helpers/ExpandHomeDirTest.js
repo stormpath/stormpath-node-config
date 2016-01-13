@@ -11,7 +11,7 @@ describe('Helpers', function () {
     var isWindows = process.platform == 'win32';
     var envHomeKey = isWindows ? 'USERPROFILE' : 'HOME';
 
-    it('expands ~/', function(){
+    it('returns path with home directory when ~/ is used', function(){
       var homePath = process.env[envHomeKey];
 
       assert.ok(homePath);
@@ -20,22 +20,38 @@ describe('Helpers', function () {
       var mockExpandedPath = path.join(homePath, mockPath);
 
       assert.equal(expandHomeDir('~'), homePath);
-      assert.equal(expandHomeDir('~/foo/bar/qux.corge'), mockExpandedPath);
-      assert.equal(expandHomeDir('/foo/bar/qux.corge'), mockPath);
+      assert.equal(expandHomeDir('~' + mockPath), mockExpandedPath);
+      assert.equal(expandHomeDir(mockPath), mockPath);
     });
 
-    it('returns false when no home path is set', function () {
-      var originalHomeEnv = process.env[envHomeKey];
+    describe('when home path isn\'t set', function () {
+      it('returns false when it tries to resolve ~', function () {
+        var originalHomeEnv = process.env[envHomeKey];
 
-      process.env[envHomeKey] = '';
+        process.env[envHomeKey] = '';
 
-      function restoreHomeEnv() {
-        process.env[envHomeKey] = originalHomeEnv;
-      }
+        function restoreHomeEnv() {
+          process.env[envHomeKey] = originalHomeEnv;
+        }
 
-      assert.equal(expandHomeDir('~'), false);
+        assert.equal(expandHomeDir('~'), false);
 
-      restoreHomeEnv();
+        restoreHomeEnv();
+      });
+
+      it('returns path when ~ isn\'t provided (absolute path)', function () {
+        var originalHomeEnv = process.env[envHomeKey];
+
+        process.env[envHomeKey] = '';
+
+        function restoreHomeEnv() {
+          process.env[envHomeKey] = originalHomeEnv;
+        }
+
+        assert.equal(expandHomeDir('/my/file.xml'), '/my/file.xml');
+
+        restoreHomeEnv();
+      });
     });
   })
 });

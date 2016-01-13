@@ -19,6 +19,52 @@ describe('LoadFileConfigStrategy', function () {
     invalidJsonPath = temp.path({ suffix: '.json' });
   });
 
+  describe('when home path isn\'t set', function () {
+    var isWindows = process.platform == 'win32';
+    var envHomeKey = isWindows ? 'USERPROFILE' : 'HOME';
+
+    it('should just continue', function (done) {
+      var originalHomeEnv = process.env[envHomeKey];
+
+      process.env[envHomeKey] = '';
+
+      function restoreHomeEnv() {
+        process.env[envHomeKey] = originalHomeEnv;
+      }
+
+      var strategy = new LoadFileConfigStrategy('~/something.xml', false);
+
+      strategy.process(_.cloneDeep(testConfig), function (err, config) {
+        assert.isNull(err);
+        assert.deepEqual(config, testConfig);
+        done();
+      });
+
+      restoreHomeEnv();
+    });
+
+    it('should error if file must exist', function (done) {
+      var originalHomeEnv = process.env[envHomeKey];
+
+      process.env[envHomeKey] = '';
+
+      function restoreHomeEnv() {
+        process.env[envHomeKey] = originalHomeEnv;
+      }
+
+      var strategy = new LoadFileConfigStrategy('~/something.xml', true);
+
+      strategy.process(_.cloneDeep(testConfig), function (err, config) {
+        assert.isUndefined(config);
+        assert.isNotNull(err);
+        assert.equal(err.message, "Unable to load '~/something.xml'. Environment home not set.");
+        done();
+      });
+
+      restoreHomeEnv();
+    });
+  });
+
   it("should error when loading file with unsupported file type", function (done) {
     var strategy = new LoadFileConfigStrategy('something.xml', false);
     strategy.process(_.cloneDeep(testConfig), function (err, config) {

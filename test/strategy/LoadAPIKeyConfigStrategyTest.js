@@ -28,6 +28,52 @@ describe('LoadAPIKeyConfigStrategy', function () {
     };
   });
 
+  describe('when home path isn\'t set', function () {
+    var isWindows = process.platform == 'win32';
+    var envHomeKey = isWindows ? 'USERPROFILE' : 'HOME';
+
+    it('should just continue', function (done) {
+      var originalHomeEnv = process.env[envHomeKey];
+
+      process.env[envHomeKey] = '';
+
+      function restoreHomeEnv() {
+        process.env[envHomeKey] = originalHomeEnv;
+      }
+
+      var strategy = new LoadAPIKeyConfigStrategy('~/apiKey.properties', false);
+
+      strategy.process(_.cloneDeep(testConfig), function (err, config) {
+        assert.isNull(err);
+        assert.deepEqual(config, testConfig);
+        done();
+      });
+
+      restoreHomeEnv();
+    });
+
+    it('should error if file must exist', function (done) {
+      var originalHomeEnv = process.env[envHomeKey];
+
+      process.env[envHomeKey] = '';
+
+      function restoreHomeEnv() {
+        process.env[envHomeKey] = originalHomeEnv;
+      }
+
+      var strategy = new LoadAPIKeyConfigStrategy('~/apiKey.properties', true);
+
+      strategy.process(_.cloneDeep(testConfig), function (err, config) {
+        assert.isUndefined(config);
+        assert.isNotNull(err);
+        assert.equal(err.message, "Unable to load '~/apiKey.properties'. Environment home not set.");
+        done();
+      });
+
+      restoreHomeEnv();
+    });
+  });
+
   it("should succeed when loading invalid key without requiring it to exist", function (done) {
     var strategy = new LoadAPIKeyConfigStrategy(invalidKeyPath, false);
     strategy.process(_.cloneDeep(testConfig), function (err, config) {

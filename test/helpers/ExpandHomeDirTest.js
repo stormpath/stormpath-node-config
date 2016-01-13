@@ -1,11 +1,10 @@
 'use strict';
 
 var path = require('path');
-var common = require('./common');
-var helpers = require('../lib/helpers');
+var common = require('./../common');
+var expandHomeDir = require('../../lib/helpers/expand-home-dir');
 
 var assert = common.assert;
-var expandHomeDir = helpers.expandHomeDir;
 
 describe('Helpers', function () {
   describe('expandHomeDir', function () {

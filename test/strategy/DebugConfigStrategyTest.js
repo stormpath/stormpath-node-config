@@ -23,8 +23,8 @@ describe('DebugConfigStrategy', function () {
   var loggedTestMessages = [];
 
   before(function () {
-    testSection = 'test';
-    testConfig = { abc: '123' };
+    testSection = '5c774a9e-72b2-4784-9729-3add5341fd39';
+    testConfig = { abc: '5e2bf333-deac-490a-bfb2-f7d83f2748e1' };
 
     testListener = function onMessageLogged(type, message) {
       loggedTestMessages.push({ type: type, message: message });
@@ -47,7 +47,7 @@ describe('DebugConfigStrategy', function () {
 
     it('should log debug message', function () {
       assert.equal(loggedTestMessages.length, 1);
-      assert.deepEqual(loggedTestMessages[0], { type: 'debug', message: 'test:\n' + JSON.stringify(testConfig, null, 4) + '\n' });
+      assert.deepEqual(loggedTestMessages[0], { type: 'debug', message: testSection + ':\n' + JSON.stringify(testConfig, null, 4) + '\n' });
     });
 
     it('should call callback with provided config', function () {

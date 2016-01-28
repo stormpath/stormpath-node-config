@@ -34,21 +34,24 @@ describe('DebugConfigStrategy', function () {
     testStrategy = new DebugConfigStrategy(mockLogger, testSection);
   });
 
-  describe('when processing', function () {
-    it('should log debug message', function (done) {
+  describe('.process(config, callback)', function () {
+    var returnedConfig;
+
+    beforeEach(function (done) {
       testStrategy.process(testConfig, function (err, config) {
-        assert.equal(loggedTestMessages.length, 1);
-        assert.deepEqual(loggedTestMessages[0], { type: 'debug', message: 'test:\n' + JSON.stringify(testConfig, null, 4) + '\n' });
-        done();
+        returnedConfig = config;
+
+        done(err);
       });
     });
 
-    it('should call callback with provided config', function (done) {
-      testStrategy.process(testConfig, function (err, config) {
-        assert.notOk(err);
-        assert.deepEqual(config, testConfig);
-        done();
-      });
+    it('should log debug message', function () {
+      assert.equal(loggedTestMessages.length, 1);
+      assert.deepEqual(loggedTestMessages[0], { type: 'debug', message: 'test:\n' + JSON.stringify(testConfig, null, 4) + '\n' });
     });
-  })
+
+    it('should call callback with provided config', function () {
+      assert.deepEqual(returnedConfig, testConfig);
+    });
+  });
 });

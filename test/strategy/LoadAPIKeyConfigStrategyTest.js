@@ -14,7 +14,7 @@ var LoadAPIKeyConfigStrategy = strategy.LoadAPIKeyConfigStrategy;
 describe('LoadAPIKeyConfigStrategy', function () {
   var invalidKeyPath, validKeyPath, validPropertiesData, testConfig;
 
-  before(function () {
+  beforeEach(function () {
     invalidKeyPath = temp.path({ suffix: '.properties' });
     validKeyPath = temp.path({ suffix: '.properties' });
     validPropertiesData = "apiKey.id = abc\napiKey.secret = def";
@@ -28,49 +28,82 @@ describe('LoadAPIKeyConfigStrategy', function () {
     };
   });
 
-  describe('when home path isn\'t set', function () {
+  describe('when home path', function () {
     var isWindows = process.platform == 'win32';
     var envHomeKey = isWindows ? 'USERPROFILE' : 'HOME';
 
-    it('should just continue', function (done) {
-      var originalHomeEnv = process.env[envHomeKey];
+    describe('is set', function () {
+      it('should load path with ~', function (done) {
+        var mockFileName = 'a2f4b585-82f5-4650-a765-410f7d1b7012.properties';
+        var mockFilePath = process.env[envHomeKey] + '/' + mockFileName;
 
-      process.env[envHomeKey] = '';
+        fs.writeFileSync(mockFilePath, validPropertiesData);
 
-      function restoreHomeEnv() {
-        process.env[envHomeKey] = originalHomeEnv;
-      }
+        after(function () {
+          fs.unlinkSync(mockFilePath);
+        });
 
-      var strategy = new LoadAPIKeyConfigStrategy('~/apiKey.properties', false);
+        var strategy = new LoadAPIKeyConfigStrategy('~/' + mockFileName, true);
 
-      strategy.process(_.cloneDeep(testConfig), function (err, config) {
-        assert.isNull(err);
-        assert.deepEqual(config, testConfig);
-        done();
+        strategy.process(_.cloneDeep({}), function (err, config) {
+          assert.isNotOk(err);
+          assert.ok(config);
+
+          assert.deepEqual(config, {
+            client: {
+              apiKey: {
+                id: 'abc',
+                secret: 'def'
+              }
+            }
+          })
+
+          done();
+        });
       });
-
-      restoreHomeEnv();
     });
 
-    it('should error if file must exist', function (done) {
-      var originalHomeEnv = process.env[envHomeKey];
+    describe('isn\' set', function () {
+      it('should just continue', function (done) {
+        var originalHomeEnv = process.env[envHomeKey];
 
-      process.env[envHomeKey] = '';
+        process.env[envHomeKey] = '';
 
-      function restoreHomeEnv() {
-        process.env[envHomeKey] = originalHomeEnv;
-      }
+        function restoreHomeEnv() {
+          process.env[envHomeKey] = originalHomeEnv;
+        }
 
-      var strategy = new LoadAPIKeyConfigStrategy('~/apiKey.properties', true);
+        var strategy = new LoadAPIKeyConfigStrategy('~/apiKey.properties', false);
 
-      strategy.process(_.cloneDeep(testConfig), function (err, config) {
-        assert.isUndefined(config);
-        assert.isNotNull(err);
-        assert.equal(err.message, "Unable to load '~/apiKey.properties'. Environment home not set.");
-        done();
+        strategy.process(_.cloneDeep(testConfig), function (err, config) {
+          assert.isNull(err);
+          assert.deepEqual(config, testConfig);
+          done();
+        });
+
+        restoreHomeEnv();
       });
 
-      restoreHomeEnv();
+      it('should error if file must exist', function (done) {
+        var originalHomeEnv = process.env[envHomeKey];
+
+        process.env[envHomeKey] = '';
+
+        function restoreHomeEnv() {
+          process.env[envHomeKey] = originalHomeEnv;
+        }
+
+        var strategy = new LoadAPIKeyConfigStrategy('~/apiKey.properties', true);
+
+        strategy.process(_.cloneDeep(testConfig), function (err, config) {
+          assert.isUndefined(config);
+          assert.isNotNull(err);
+          assert.equal(err.message, "Unable to load '~/apiKey.properties'. Environment home not set.");
+          done();
+        });
+
+        restoreHomeEnv();
+      });
     });
   });
 

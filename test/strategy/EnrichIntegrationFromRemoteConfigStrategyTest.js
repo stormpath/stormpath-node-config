@@ -81,7 +81,13 @@ describe('EnrichIntegrationFromRemoteConfigStrategy', function () {
 
   before(function (done) {
     client = new stormpath.Client({
-      skipRemoteConfig: true
+      skipRemoteConfig: true,
+      client: {
+        apiKey: {
+          id: 'abc',
+          secret: 'def'
+        }
+      }
     });
 
     testStrategy = new EnrichIntegrationFromRemoteConfigStrategy(function () {

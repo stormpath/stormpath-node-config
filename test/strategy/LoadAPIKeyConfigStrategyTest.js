@@ -157,7 +157,7 @@ describe('LoadAPIKeyConfigStrategy', function () {
 
     strategy.process(_.cloneDeep(testConfig), function (err, config) {
       assert.isNull(err);
-      assert.deepEqual(config, {});
+      assert.deepEqual(config, testConfig);
       done();
     });
   });

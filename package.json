@@ -31,7 +31,7 @@
     "mocha": "^2.3.3",
     "mocha-lcov-reporter": "^1.0.0",
     "sinon": "^1.17.2",
-    "stormpath": "^0.16.0",
+    "stormpath": "^0.17.0",
     "temp": "^0.8.3"
   },
   "dependencies": {

@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.0.19
+
+Similar to 0.0.14, adding a temporary patch to `ExtendConfigStrategy` to allow
+the developer to define the new `stormpath.web.produces` array.
+
 ### 0.0.18
 
 * Fixed issue with expandHomeDir() not returning absolute path when home path was missing.

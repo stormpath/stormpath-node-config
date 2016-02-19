@@ -1,9 +1,28 @@
 # Changelog
 
+### 0.0.20
+
+* Similar to 0.0.14, adding a temporary patch to `ExtendConfigStrategy` to allow
+  the developer to define the new `stormpath.web.produces` array.
+
+* Add fix for `web.spa.view` validation that was crashing the Node SDK tests.
+
 ### 0.0.19
 
-Similar to 0.0.14, adding a temporary patch to `ExtendConfigStrategy` to allow
-the developer to define the new `stormpath.web.produces` array.
+* Now validating that auto login and email verification options aren't enabled
+  at the same time. (#1).
+
+* Added debugging capabilities for debugging configuration strategies (#23).
+
+* Fixed: Empty stormpath.apikey file clears configuration (#26).
+
+* Fixed problem with loading API Key properties from the home path (#28).
+
+* Add validation for the new `stormpath.web.spa.view` property.
+
+* Updated dependencies:
+  * `lodash@3.10.1` -> `lodash@4.0.0`
+  * `flat@1.6.0` -> `flat@2.0.0`
 
 ### 0.0.18
 

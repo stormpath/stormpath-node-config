@@ -194,7 +194,7 @@ describe('EnrichIntegrationFromRemoteConfigStrategy', function () {
       });
     });
 
-    it('should set the socialProviders property on the configuration', function (done) {
+    it('should set the web.social property on the configuration', function (done) {
       var mockOAuthPolicy = {};
       var mockAccountStoreMappings = new Collection({ size: 1 });
       var mockApplication = makeMockApplication(mockOAuthPolicy, mockAccountStoreMappings);
@@ -202,7 +202,7 @@ describe('EnrichIntegrationFromRemoteConfigStrategy', function () {
 
       testStrategy.process(mockConfig, function (err, result) {
         assert.isNull(err);
-        assert.isDefined(result.socialProviders);
+        assert.isDefined(result.web.social);
         done();
       });
     });

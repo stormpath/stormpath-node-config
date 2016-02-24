@@ -1,5 +1,11 @@
 # Changelog
 
+### 0.0.21
+
+* Change `EnrichIntegrationFromRemoteConfigStrategy` to use `config.web.social`
+  instead of `config.socialProviders`. Also social provider `callbackUri` is now
+  just `uri`.
+
 ### 0.0.20
 
 * Similar to 0.0.14, adding a temporary patch to `ExtendConfigStrategy` to allow

@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.0.22
+
+* Fix `ExtendConfigStrategy` so that the fields `web.login.form.fieldOrder` and
+`web.register.form.fieldOrder` are copied instead of extended.
+
 ### 0.0.21
 
 * Change `EnrichIntegrationFromRemoteConfigStrategy` to use `config.web.social`

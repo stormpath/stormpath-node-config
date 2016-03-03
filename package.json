@@ -1,6 +1,6 @@
 {
   "name": "stormpath-config",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "description": "Stormpath configuration loader.",
   "main": "index.js",
   "scripts": {
@@ -31,7 +31,7 @@
     "mocha": "^2.3.3",
     "mocha-lcov-reporter": "^1.0.0",
     "sinon": "^1.17.2",
-    "stormpath": "^0.17.1",
+    "stormpath": "^0.17.4",
     "temp": "^0.8.3"
   },
   "dependencies": {

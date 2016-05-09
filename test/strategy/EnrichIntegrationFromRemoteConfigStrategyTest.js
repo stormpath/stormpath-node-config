@@ -208,7 +208,7 @@ describe('EnrichIntegrationFromRemoteConfigStrategy', function () {
     });
   });
 
-  describe('_enrichWithDirectoryPolicies method', function () {
+  describe('when parsing the directory workflow statuses', function () {
     var enrichWithDirectoryPolicies;
     var mockConfig;
 
@@ -227,27 +227,53 @@ describe('EnrichIntegrationFromRemoteConfigStrategy', function () {
       sandbox.stub(policy, 'getStrength').yields(null, {});
     });
 
-    describe('directory.passwordPolicy.resetEmailStatus property', function () {
+    describe('the password policy', function () {
       describe('when "ENABLED"', function () {
         beforeEach(function () {
           mockDirectory.passwordPolicy.resetEmailStatus = 'ENABLED';
         });
 
-        it('should set config.web.forgotPassword.enabled to true', function (done) {
-          mockConfig.web.forgotPassword.enabled = false;
+        describe('and config.web.forgotPassword.enabled is false', function () {
+          it('should leave config.web.forgotPassword.enabled as false', function (done) {
+            mockConfig.web.forgotPassword.enabled = false;
 
-          enrichWithDirectoryPolicies(client, mockConfig, mockDirectory.href, function () {
-            assert.equal(mockConfig.web.forgotPassword.enabled, true);
-            done();
+            enrichWithDirectoryPolicies(client, mockConfig, mockDirectory.href, function () {
+              assert.equal(mockConfig.web.forgotPassword.enabled, false);
+              done();
+            });
           });
         });
 
-        it('should set config.web.changePassword.enabled to true', function (done) {
-          mockConfig.web.changePassword.enabled = false;
+        describe('and config.web.forgotPassword.enabled is undefined', function () {
+          it('should set config.web.forgotPassword.enabled to true', function (done) {
+            mockConfig.web.forgotPassword.enabled = undefined;
 
-          enrichWithDirectoryPolicies(client, mockConfig, mockDirectory.href, function () {
-            assert.equal(mockConfig.web.changePassword.enabled, true);
-            done();
+            enrichWithDirectoryPolicies(client, mockConfig, mockDirectory.href, function () {
+              assert.equal(mockConfig.web.forgotPassword.enabled, true);
+              done();
+            });
+          });
+        });
+
+        describe('and config.web.changePassword.enabled is false', function () {
+          it('should leave config.web.changePassword.enabled as false', function (done) {
+            mockConfig.web.changePassword.enabled = false;
+
+            enrichWithDirectoryPolicies(client, mockConfig, mockDirectory.href, function () {
+              assert.equal(mockConfig.web.changePassword.enabled, false);
+              done();
+            });
+          });
+        });
+
+        describe('and config.web.changePassword.enabled is undefined', function () {
+          it('should set config.web.changePassword.enabled to true', function (done) {
+            mockConfig.web.changePassword.enabled = undefined;
+
+            enrichWithDirectoryPolicies(client, mockConfig, mockDirectory.href, function () {
+              assert.equal(mockConfig.web.changePassword.enabled, true);
+              done();
+            });
           });
         });
       });
@@ -272,6 +298,36 @@ describe('EnrichIntegrationFromRemoteConfigStrategy', function () {
           enrichWithDirectoryPolicies(client, mockConfig, mockDirectory.href, function () {
             assert.equal(mockConfig.web.changePassword.enabled, false);
             done();
+          });
+        });
+      });
+    });
+
+    describe('the email verification policy', function(){
+      describe('when ENABLED', function(){
+        beforeEach(function () {
+          mockDirectory.accountCreationPolicy.verificationEmailStatus = 'ENABLED';
+        });
+
+        describe('and config.web.verifyEmail.enabled is false', function () {
+          it('should leave config.web.verifyEmail.enabled as false', function (done) {
+            mockConfig.web.verifyEmail.enabled = false;
+
+            enrichWithDirectoryPolicies(client, mockConfig, mockDirectory.href, function () {
+              assert.equal(mockConfig.web.verifyEmail.enabled, false);
+              done();
+            });
+          });
+        });
+
+        describe('and config.web.verifyEmail.enabled is undefined', function () {
+          it('should set config.web.verifyEmail.enabled to true', function (done) {
+            mockConfig.web.verifyEmail.enabled = undefined;
+
+            enrichWithDirectoryPolicies(client, mockConfig, mockDirectory.href, function () {
+              assert.equal(mockConfig.web.verifyEmail.enabled, true);
+              done();
+            });
           });
         });
       });

@@ -1,5 +1,10 @@
 # Changelog
 
+### 0.0.23
+
+* Fix `EnrichIntegrationFromRemoteConfigStrategy` so that user-provided config is
+able to disable email verification and password reset.
+
 ### 0.0.22
 
 * Fix `ExtendConfigStrategy` so that the fields `web.login.form.fieldOrder` and

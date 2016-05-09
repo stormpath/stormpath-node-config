@@ -276,8 +276,6 @@ describe('EnrichIntegrationFromRemoteConfigStrategy', function () {
             });
           });
         });
-
-
       });
 
       describe('when undefined', function () {
@@ -332,9 +330,7 @@ describe('EnrichIntegrationFromRemoteConfigStrategy', function () {
             });
           });
         });
-
       });
     });
   });
-
 });

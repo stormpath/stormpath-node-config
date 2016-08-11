@@ -37,7 +37,7 @@
   "dependencies": {
     "async": "^2.0.1",
     "flat": "^2.0.0",
-    "js-yaml": "^3.4.2",
+    "js-yaml": "^3.5.4",
     "lodash": "^4.0.0",
     "properties-parser": "^0.3.0"
   }

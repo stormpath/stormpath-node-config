@@ -1,5 +1,11 @@
 # Changelog
 
+### 0.0.24
+
+* Fix support for Node version 6.
+* Update packages: mocha-lcov-reporter to version 1.1.0, js-yaml to version 3.5.4,
+  async to version 2.0.1, istanbul to version 0.4.3 and mocha to version 3.0.2.
+
 ### 0.0.23
 
 * Fix `EnrichIntegrationFromRemoteConfigStrategy` so that user-provided config is

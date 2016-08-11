@@ -134,7 +134,7 @@ describe('LoadFileConfigStrategy', function () {
     strategy.process({}, function (err, config) {
       assert.isUndefined(config);
       assert.isNotNull(err);
-      assert.equal(err.message, "Error parsing file '" + validJsonPath + "'.\nDetails: SyntaxError: Unexpected token ,");
+      assert.match(err.message, /Unexpected token/);
       done();
     });
   });

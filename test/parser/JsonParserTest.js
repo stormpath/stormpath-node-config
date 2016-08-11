@@ -36,7 +36,7 @@ describe('JsonParser', function () {
 
       assert.isTrue(!!err);
       assert.isString(err.message);
-      assert.equal(err.message, "Unexpected token ,");
+      assert.match(err.message, /Unexpected token/);
 
       done();
     });

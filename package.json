@@ -36,7 +36,6 @@
   },
   "dependencies": {
     "async": "^1.4.2",
-    "cloneextend": "0.0.3",
     "flat": "^2.0.0",
     "js-yaml": "^3.4.2",
     "lodash": "^4.0.0",

@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.0.25
+
+* Allow a `requestExecutor` to be passed in.
+
 ### 0.0.24
 
 * Fix support for Node version 6.

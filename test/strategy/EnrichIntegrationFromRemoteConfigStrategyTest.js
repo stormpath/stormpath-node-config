@@ -333,4 +333,11 @@ describe('EnrichIntegrationFromRemoteConfigStrategy', function () {
       });
     });
   });
+
+  describe.skip('when parsing the directory account schema', function() {
+    it('fields should still be required by remote config, even if disabled locally', function(done){
+    });
+    it('fields should still be required by remote config, even if disabled locally', function(done){
+    });
+  });
 });

@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.0.26
+ 
+* Patch to preserve locally defined scope options for provider directories.
+
 ### 0.0.25
 
 * Allow a `requestExecutor` to be passed in.

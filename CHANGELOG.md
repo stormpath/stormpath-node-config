@@ -1,5 +1,9 @@
 # Changelog
 
+### 0.0.27
+
+* Patch to fix exception when a group is mapped as the default account store (#65).
+
 ### 0.0.26
  
 * Patch to preserve locally defined scope options for provider directories.

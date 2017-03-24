@@ -333,4 +333,95 @@ describe('EnrichIntegrationFromRemoteConfigStrategy', function () {
       });
     });
   });
+
+  describe('._enrichWithDirectoryAccountModel(client, config, directory, callback)', function() {
+    var testMethod;
+    var mockClient;
+    var mockConfig;
+    var mockDirectory;
+    var mockFields;
+    var sinonSandbox;
+
+    beforeEach(function () {
+      sinonSandbox = sinon.sandbox.create();
+
+      testMethod = EnrichIntegrationFromRemoteConfigStrategy.prototype._enrichWithDirectoryAccountModel;
+
+      mockClient = {};
+
+      mockConfig = {
+        web: {
+          register: {
+            form: {
+              fields: {
+                givenName: {
+                  enabled: true,
+                  required: false
+                },
+                surname: {
+                  enabled: true,
+                  required: false
+                }
+              }
+            }
+          }
+        }
+      };
+
+      mockFields = {
+        items: [{
+          name: 'givenName',
+          required: true
+        }, {
+          name: 'surname',
+          required: true
+        }],
+        each: function (iterator, onComplete) {
+          var self = this;
+          this.items.forEach(function (item, index) {
+            iterator(item, function () {
+              if (onComplete && index === self.items.length - 1) {
+                onComplete();
+              }
+            });
+          });
+        }
+      };
+
+      mockDirectory = {
+        getAccountSchema: function (callback) {
+          callback(null, {
+            getFields: function (callback) {
+              callback(null, mockFields);
+            }
+          });
+        }
+      };
+    });
+
+    afterEach(function () {
+      sinonSandbox.restore();
+    });
+
+    describe('when givenName and surname registration fields in config are not required', function () {
+      describe('but remote accountSchema has fields set to required', function () {
+        it('should warn and set fields in config as required', function (done) {
+          var testFormFields = mockConfig.web.register.form.fields;
+          var consoleMock = sinonSandbox.mock(console);
+
+          consoleMock.expects('warn').twice();
+
+          testMethod(mockClient, mockConfig, mockDirectory, function (err) {
+            assert.equal(err, null);
+            assert.equal(testFormFields.givenName.required, true);
+            assert.equal(testFormFields.surname.required, true);
+
+            consoleMock.verify();
+
+            done();
+          });
+        });
+      });
+    });
+  });
 });

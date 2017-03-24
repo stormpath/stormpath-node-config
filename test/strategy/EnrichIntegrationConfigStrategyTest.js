@@ -9,115 +9,65 @@ var strategy = require('../../lib/strategy');
 var EnrichIntegrationConfigStrategy = strategy.EnrichIntegrationConfigStrategy;
 
 describe('EnrichIntegrationConfigStrategy', function () {
-  var enabled = { enabled: true };
-  var disabled = { enabled: false };
-
-  it("shouldn't modify config if no flags are set", function (done) {
-    var testConfig = {};
-
-    var strategy = new EnrichIntegrationConfigStrategy(testConfig);
-
-    strategy.process(_.cloneDeep(testConfig), function (err, config) {
-      assert.isNull(err);
-      assert.deepEqual(testConfig, config);
-      done();
-    });
-  });
-
-  it("should enable web endpoints when website config is true", function (done) {
-    var testConfig = {
-      website: true
-    };
-
-    var strategy = new EnrichIntegrationConfigStrategy(testConfig);
-
-    strategy.process(_.cloneDeep(testConfig), function (err, config) {
-      assert.isNull(err);
-
-      assert.deepEqual(config, {
-        website: true,
-        web: {
-          register: enabled,
-          login: enabled,
-          logout: enabled,
-          me: enabled
+  var testConfig = {
+    web: {
+      multiTenancy: {
+        enabled: false
+      },
+      register: {
+        form: {
+          fields: {
+            organizationNameKey: {
+            }
+          }
         }
-      });
-
-      done();
-    });
-  });
-
-  it("should enable web endpoints when web config is true but without overriding any endpoints already set by user", function (done) {
-    var testConfig = {
-      website: true,
-      web: {
-        login: disabled,
-        me: disabled
+      },
+      login: {
+        form: {
+          fields: {
+            organizationNameKey: {
+            }
+          }
+        }
       }
-    };
+    }
+  };
 
-    var strategy = new EnrichIntegrationConfigStrategy(testConfig);
+  describe('when nothing is enabled', function () {
+    it('shouldn\'t modify the config', function (done) {
+      var newTestConfig = _.cloneDeep(testConfig);
+      var strategy = new EnrichIntegrationConfigStrategy(testConfig);
 
-    strategy.process(_.cloneDeep(testConfig), function (err, config) {
-      assert.isNull(err);
-
-      assert.deepEqual(config, {
-        website: true,
-        web: {
-          register: enabled,
-          login: disabled,
-          logout: enabled,
-          me: disabled
-        }
+      strategy.process(newTestConfig, function (err, config) {
+        assert.isNull(err);
+        assert.deepEqual(testConfig, config);
+        done();
       });
-
-      done();
     });
   });
 
-  it("should enable api endpoints when api config is true", function (done) {
-    var testConfig = {
-      api: true
-    };
+  describe('web.multiTenancy.enabled is true', function () {
+    var newConfig;
 
-    var strategy = new EnrichIntegrationConfigStrategy(testConfig);
+    before(function (done) {
+      var newTestConfig = _.cloneDeep(testConfig);
+      var strategy = new EnrichIntegrationConfigStrategy(testConfig);
 
-    strategy.process(_.cloneDeep(testConfig), function (err, config) {
-      assert.isNull(err);
+      newTestConfig.web.multiTenancy.enabled = true;
 
-      assert.deepEqual(config, {
-        api: true,
-        web: {
-          oauth2: enabled
-        }
+      strategy.process(newTestConfig, function (err, config) {
+        assert.isNull(err);
+        newConfig = config;
+        done();
       });
-
-      done();
     });
-  });
 
-  it("should enable api endpoints when api config is true but without overriding any endpoints already set by user", function (done) {
-    var testConfig = {
-      api: true,
-      web: {
-        oauth2: disabled
-      }
-    };
+    it('should set web.login.form.fields.organizationNameKey.enabled to true', function () {
+      assert.equal(newConfig.web.login.form.fields.organizationNameKey.enabled, true);
+    });
 
-    var strategy = new EnrichIntegrationConfigStrategy(testConfig);
-
-    strategy.process(_.cloneDeep(testConfig), function (err, config) {
-      assert.isNull(err);
-
-      assert.deepEqual(config, {
-        api: true,
-        web: {
-          oauth2: disabled
-        }
-      });
-
-      done();
+    it('should set web.register.form.fields.organizationNameKey.enabled to true', function () {
+      assert.equal(newConfig.web.register.form.fields.organizationNameKey.enabled, true);
     });
   });
 });
